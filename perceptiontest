@@ -1,0 +1,56 @@
+＃感知器，根据已知数据分类情况，训练权重
+import matplotlib.pyplot as plt
+import random
+
+x1, x2, y1, y2 = [], [], [], []
+
+
+def find_mistake(w, x):
+    for i in range(len(x)):
+        if x[i][2] * (w[0] * x[i][0] + w[1] * x[i][1] + w[2]) <= 0:
+            return i
+    return i
+
+
+f = open("D:\perceptiontest1.txt")
+x1 = [float(i) for i in f.readline().split(",")]#float(i)
+f = open("D:\perceptiontest2.txt")
+x2 = [float(i) for i in f.readline().split(",")]
+f = open("D:\perceptiontest3.txt")
+y1 = [float(i) for i in f.readline().split(",")]
+f = open("D:\perceptiontest4.txt")
+y2 = [float(i) for i in f.readline().split(",")]
+
+
+'''
+print(x1)
+print(x2)
+print(y1)
+print(y2)
+'''
+
+data = []
+for i in range(len(x1)):
+    data.append([x1[i], y1[i], -1])
+    data.append([x2[i], y2[i], 1])
+
+# draw node 点
+plt.plot(x1, y1, 'bx', x2, y2, 'ro')
+# draw standard line 线
+plt.plot([10, 10], [0, 10])
+
+w = [0, 0, 0]
+t = find_mistake(w, data)  #返回的是错误的点
+while t < len(data) - 1:
+    w = [w[0] + data[t][2] * data[t][0], w[1] + data[t][2] * data[t][1], w[2] + data[t][2]]
+    t = find_mistake(w, data)
+print(w)
+print(data)
+
+point1 = [5.39, (-w[2] - w[1] * 10) / w[0]]
+point2 = [(-w[0] * 5.39 - w[2]) / w[1], 10]
+plt.plot(point1, point2, "r")
+
+print(point1, point2)
+
+plt.show()
