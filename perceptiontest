@@ -1,24 +1,23 @@
-＃感知器，根据已知数据分类情况，训练权重
+＃感知器，根据已知数据分类情况（x大于10和x小于10），训练权重
 import matplotlib.pyplot as plt
 import random
 
 x1, x2, y1, y2 = [], [], [], []
 
-
+#返回不满足条件的点函数
 def find_mistake(w, x):
     for i in range(len(x)):
         if x[i][2] * (w[0] * x[i][0] + w[1] * x[i][1] + w[2]) <= 0:
             return i
     return i
 
-
-f = open("D:\perceptiontest1.txt")
+f = open("D:\perceptiontest1.txt")  #x1是横坐标小于10的点
 x1 = [float(i) for i in f.readline().split(",")]#float(i)
-f = open("D:\perceptiontest2.txt")
+f = open("D:\perceptiontest2.txt")  #x2是横坐标大于10的点
 x2 = [float(i) for i in f.readline().split(",")]
-f = open("D:\perceptiontest3.txt")
+f = open("D:\perceptiontest3.txt")  #纵坐标
 y1 = [float(i) for i in f.readline().split(",")]
-f = open("D:\perceptiontest4.txt")
+f = open("D:\perceptiontest4.txt")  #纵坐标
 y2 = [float(i) for i in f.readline().split(",")]
 
 
@@ -40,7 +39,7 @@ plt.plot(x1, y1, 'bx', x2, y2, 'ro')
 plt.plot([10, 10], [0, 10])
 
 w = [0, 0, 0]
-t = find_mistake(w, data)  #返回的是错误的点
+t = find_mistake(w, data)  #返回的是不满足条件的点，直到所有的点均满足分类条件，w便为所求
 while t < len(data) - 1:
     w = [w[0] + data[t][2] * data[t][0], w[1] + data[t][2] * data[t][1], w[2] + data[t][2]]
     t = find_mistake(w, data)
